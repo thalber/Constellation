@@ -22,6 +22,7 @@ namespace Constellation
             }
             catch (Exception ex) { Logger.LogWarning(ex); }
         }
+        private bool started = false;
 
         private void notches_gu(On.Menu.EndgameMeter.NotchMeter.orig_GrafUpdate orig, Menu.EndgameMeter.NotchMeter self, float timeStacker)
         {
@@ -45,6 +46,10 @@ namespace Constellation
             meshreal.vertices[meshreal.vertices.Length - 1] = self.meterTip;
             meshreal.vertices[0] = self.meterStart;
             for (int i = 0; i < meshreal.vertices.Length; i++) if (meshreal.vertices[i] == default) meshreal.vertices[i] = self.meterTip;
+            if (!started)
+            {
+                Logger.LogError("started!"); started = true;
+            }
         }
 
         private Vector2 baseNotchPos(Menu.EndgameMeter.NotchMeter inst, int notch) => Vector2.Lerp(inst.meterStart, inst.meterTip, (float)notch / inst.notchSprites.GetLength(0));
@@ -73,13 +78,12 @@ namespace Constellation
                 tmes.verticeColors[i] = c;
             }
             __mesh = new(tmes);
-            self.owner.mainContainer.AddChild(tmes);
+            self.notchSprites[0, 0].container.AddChild(tmes);
         }
 
         public float[] offsets;
         private WeakReference __mesh;
         public TriangleMesh Mesh => __mesh?.Target as TriangleMesh;
-
         
     }
     internal static class ext

@@ -14,4 +14,8 @@
 		</Reference>
 	</ItemGroup>
 
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <Exec Command="if defined RWMods (copy /Y &quot;$(TargetPath)&quot; &quot;%25RWMods%25&quot;)" />
+	</Target>
+
 </Project>
